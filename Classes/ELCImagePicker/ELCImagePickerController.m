@@ -25,6 +25,8 @@
     if (self) {
         self.maximumImagesCount = 4;
         [albumPicker setParent:self];
+		if (isIOS7)
+			[[self navigationBar] setBarTintColor:[UIColor colorWithRed:0.082 green:0.473 blue:0.716 alpha:1.000]];
     }
     return self;
 }
