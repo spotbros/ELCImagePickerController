@@ -76,10 +76,8 @@
 - (void)cellTapped:(UITapGestureRecognizer *)tapRecognizer
 {
     CGPoint point = [tapRecognizer locationInView:self];
-    CGFloat totalWidth = self.rowAssets.count * 75 + (self.rowAssets.count - 1) * 4;
-    CGFloat startX = (self.bounds.size.width - totalWidth) / 2;
     
-	CGRect frame = CGRectMake(startX, 2, 75, 75);
+	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
 	for (int i = 0; i < [_rowAssets count]; ++i) {
         if (CGRectContainsPoint(frame, point)) {
@@ -94,11 +92,8 @@
 }
 
 - (void)layoutSubviews
-{    
-    CGFloat totalWidth = self.rowAssets.count * 75 + (self.rowAssets.count - 1) * 4;
-    CGFloat startX = (self.bounds.size.width - totalWidth) / 2;
-    
-	CGRect frame = CGRectMake(startX, 2, 75, 75);
+{
+	CGRect frame = CGRectMake(4, 2, 75, 75);
 	
 	for (int i = 0; i < [_rowAssets count]; ++i) {
 		UIImageView *imageView = [_imageViewArray objectAtIndex:i];
