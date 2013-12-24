@@ -25,8 +25,7 @@
     if (self) {
         self.maximumImagesCount = 10;
         [albumPicker setParent:self];
-		if (isIOS7)
-			[[self navigationBar] setBarTintColor:[UIColor colorWithRed:0.082 green:0.473 blue:0.716 alpha:1.000]];
+		[self configureVC];
     }
     return self;
 }
@@ -36,9 +35,27 @@
     self = [super initWithRootViewController:rootViewController];
     if (self) {
         self.maximumImagesCount = 10;
+		[self configureVC];
     }
     return self;
 }
+
+
+- (void) configureVC
+{
+	if (isIOS7) {
+		[[self navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
+		[[self navigationBar] setBarTintColor:[UIColor colorWithRed:0.082 green:0.473 blue:0.716 alpha:1.000]];
+	}
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+	// statusbar white
+	if (isIOS7)
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
 
 - (void)cancelImagePicker
 {
