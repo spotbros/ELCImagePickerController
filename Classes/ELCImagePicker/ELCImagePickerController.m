@@ -44,7 +44,7 @@
 - (void) configureVC
 {
 	if (isIOS7) {
-		[[self navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
+		[[self navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 		[[self navigationBar] setBarTintColor:[UIColor colorWithRed:0.082 green:0.473 blue:0.716 alpha:1.000]];
 	}
 }
