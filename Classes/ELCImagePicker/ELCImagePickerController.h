@@ -24,6 +24,11 @@
 - (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info;
 
 /**
+ * Called when image is nil.
+ */
+- (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingWithError:(NSError *) error;
+
+/**
  * Called when image selection was cancelled, by tapping the 'Cancel' BarButtonItem.
  */
 - (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker;

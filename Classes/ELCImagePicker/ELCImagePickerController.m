@@ -108,7 +108,7 @@
             
             if (_returnsOriginalImage) {
                 imgRef = [assetRep fullResolutionImage];
-                orientation = [assetRep orientation];
+                orientation = (UIImageOrientation)[assetRep orientation];
             } else {
                 imgRef = [assetRep fullScreenImage];
             }
@@ -120,8 +120,9 @@
             
             [returnArray addObject:workingDictionary];
         }
-		
-	}    
+		else if ([_imagePickerDelegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingWithError:)])
+			[_imagePickerDelegate performSelector:@selector(elcImagePickerController:didFinishPickingWithError:) withObject:self withObject:nil];
+	}
 	if (_imagePickerDelegate != nil && [_imagePickerDelegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:)]) {
 		[_imagePickerDelegate performSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:) withObject:self withObject:returnArray];
 	} else {
