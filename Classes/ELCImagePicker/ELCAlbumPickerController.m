@@ -53,11 +53,11 @@
                 NSString *sGroupPropertyName = (NSString *)[group valueForProperty:ALAssetsGroupPropertyName];
                 NSUInteger nType = [[group valueForProperty:ALAssetsGroupPropertyType] intValue];
                 
-                if (([[sGroupPropertyName lowercaseString] isEqualToString:@"camera roll"]
-                     || [[sGroupPropertyName lowercaseString] isEqualToString:@"carrete"]) && nType == ALAssetsGroupSavedPhotos) {
-                    [self.assetGroups insertObject:group atIndex:0];
+                if (nType == ALAssetsGroupAlbum) {
+                    [self.assetGroups addObject:group];
                 }
-                else {
+                else if(nType == ALAssetsGroupEvent && ([sGroupPropertyName isEqualToString:@"All Photos"] ||
+                                                        [sGroupPropertyName isEqualToString:@"Todas las fotos"])){
                     [self.assetGroups addObject:group];
                 }
 
@@ -75,7 +75,7 @@
             };	
                     
             // Enumerate Albums
-            [self.library enumerateGroupsWithTypes:ALAssetsGroupAll
+            [self.library enumerateGroupsWithTypes:ALAssetsGroupEvent | ALAssetsGroupAlbum
                                    usingBlock:assetGroupEnumerator 
                                  failureBlock:assetGroupEnumberatorFailure];
         
