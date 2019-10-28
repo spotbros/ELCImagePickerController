@@ -12,6 +12,7 @@
 @interface ELCAlbumPickerController ()
 
 @property (nonatomic, strong) ALAssetsLibrary *library;
+@property (nonatomic, strong) ALAssetsGroup *recentsGroup;
 
 @end
 
@@ -46,6 +47,17 @@
             void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
             {
                 if (group == nil) {
+                    ELCAssetTablePicker *picker = [[ELCAssetTablePicker alloc] initWithNibName: nil bundle: nil];
+                    picker.parent = self;
+
+                    picker.assetGroup = self.recentsGroup;
+                    if (self.recentsGroup) {
+                        [picker.assetGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+                        
+                        picker.assetPickerFilterDelegate = self.assetPickerFilterDelegate;
+                        
+                        [self.navigationController pushViewController:picker animated:NO];
+                    }
                     return;
                 }
                 
@@ -53,14 +65,18 @@
                 NSString *sGroupPropertyName = (NSString *)[group valueForProperty:ALAssetsGroupPropertyName];
                 NSUInteger nType = [[group valueForProperty:ALAssetsGroupPropertyType] intValue];
                 
-                if (nType == ALAssetsGroupAlbum) {
-                    [self.assetGroups addObject:group];
-                }
-                else if(nType == ALAssetsGroupEvent && ([sGroupPropertyName isEqualToString:@"All Photos"] ||
-                                                        [sGroupPropertyName isEqualToString:@"Todas las fotos"])){
-                    [self.assetGroups addObject:group];
+                if([sGroupPropertyName isEqualToString:@"All Photos"] ||
+                        [sGroupPropertyName isEqualToString:@"Todas las fotos"] ||
+                        [sGroupPropertyName isEqualToString:@"Recents"] ||
+                        [sGroupPropertyName isEqualToString:@"Recientes"]){
+                    self.recentsGroup = group;
                 }
 
+                if (group.numberOfAssets > 0)
+                {
+                    [self.assetGroups addObject:group];
+                }
+                
                 // Reload albums
                 [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
             };
@@ -72,13 +88,20 @@
                 [alert show];
                 
                 NSLog(@"A problem occured %@", [error description]);	                                 
-            };	
+            };
+            
+            
                     
             // Enumerate Albums
-            [self.library enumerateGroupsWithTypes:ALAssetsGroupEvent | ALAssetsGroupAlbum
-                                   usingBlock:assetGroupEnumerator 
-                                 failureBlock:assetGroupEnumberatorFailure];
-        
+            if (@available(iOS 13.0, *)) {
+                [self.library enumerateGroupsWithTypes: ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos
+                                            usingBlock:assetGroupEnumerator
+                                          failureBlock:assetGroupEnumberatorFailure];
+            }else{
+                [self.library enumerateGroupsWithTypes:ALAssetsGroupAll
+                                            usingBlock:assetGroupEnumerator
+                                          failureBlock:assetGroupEnumberatorFailure];
+            }
         }
     });    
 }

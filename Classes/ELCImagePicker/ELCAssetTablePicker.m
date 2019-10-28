@@ -106,8 +106,8 @@
                                               atScrollPosition:UITableViewScrollPositionBottom
                                                       animated:NO];
             }
-            
-            [self.navigationItem setTitle:self.singleSelection ? @"Pick Photo" : @"Pick Photos"];
+            NSString *sGroupPropertyName = (NSString *)[self.assetGroup valueForProperty:ALAssetsGroupPropertyName];
+            [self.navigationItem setTitle:sGroupPropertyName ? sGroupPropertyName : @"Pick Photos"];
         });
     }
 }

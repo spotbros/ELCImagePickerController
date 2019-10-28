@@ -112,13 +112,17 @@
             } else {
                 imgRef = [assetRep fullScreenImage];
             }
-            UIImage *img = [UIImage imageWithCGImage:imgRef
-                                               scale:1.0f
-                                         orientation:orientation];
-            [workingDictionary setObject:img forKey:UIImagePickerControllerOriginalImage];
-            [workingDictionary setObject:[[asset valueForProperty:ALAssetPropertyURLs] valueForKey:[[[asset valueForProperty:ALAssetPropertyURLs] allKeys] objectAtIndex:0]] forKey:UIImagePickerControllerReferenceURL];
-            
-            [returnArray addObject:workingDictionary];
+            if (imgRef) {
+                UIImage *img = [UIImage imageWithCGImage:imgRef
+                                                   scale:1.0f
+                                             orientation:orientation];
+                [workingDictionary setObject:img forKey:UIImagePickerControllerOriginalImage];
+                [workingDictionary setObject:[[asset valueForProperty:ALAssetPropertyURLs] valueForKey:[[[asset valueForProperty:ALAssetPropertyURLs] allKeys] objectAtIndex:0]] forKey:UIImagePickerControllerReferenceURL];
+                
+                [returnArray addObject:workingDictionary];
+            }else if ([_imagePickerDelegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingWithError:)]){
+                [_imagePickerDelegate performSelector:@selector(elcImagePickerController:didFinishPickingWithError:) withObject:self withObject:nil];
+            }
         }
 		else if ([_imagePickerDelegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingWithError:)])
 			[_imagePickerDelegate performSelector:@selector(elcImagePickerController:didFinishPickingWithError:) withObject:self withObject:nil];
