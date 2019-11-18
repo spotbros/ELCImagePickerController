@@ -75,7 +75,13 @@
                     self.recentsGroup = group;
                 }
 
-                if (group.numberOfAssets > 0 && ![nameArray containsObject:sGroupPropertyName])
+                if (group.numberOfAssets > 0 && ![nameArray containsObject:sGroupPropertyName] &&
+                    ![sGroupPropertyName isEqualToString:@"Videos"] &&
+                    ![sGroupPropertyName isEqualToString:@"Vídeos"] &&
+                    ![sGroupPropertyName isEqualToString:@"Slo-mo"] &&
+                    ![sGroupPropertyName isEqualToString:@"Screen Recordings"] &&
+                    ![sGroupPropertyName isEqualToString:@"Cámara lenta"] &&
+                    ![sGroupPropertyName isEqualToString:@"Grabaciones de pantalla"])
                 {
                     [self.assetGroups addObject:group];
                     [nameArray addObject:sGroupPropertyName];
@@ -97,15 +103,9 @@
             
                     
             // Enumerate Albums
-            if (@available(iOS 13.0, *)) {
-                [self.library enumerateGroupsWithTypes: ALAssetsGroupAll//ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos
-                                            usingBlock:assetGroupEnumerator
-                                          failureBlock:assetGroupEnumberatorFailure];
-            }else{
-                [self.library enumerateGroupsWithTypes:ALAssetsGroupAll
-                                            usingBlock:assetGroupEnumerator
-                                          failureBlock:assetGroupEnumberatorFailure];
-            }
+            [self.library enumerateGroupsWithTypes:ALAssetsGroupAll
+                                        usingBlock:assetGroupEnumerator
+                                      failureBlock:assetGroupEnumberatorFailure];
         }
     });    
 }
