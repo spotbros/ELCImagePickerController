@@ -36,6 +36,8 @@
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
 	self.assetGroups = tempArray;
     
+    NSMutableArray *nameArray = [[NSMutableArray alloc] init];
+    
     ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
     self.library = assetLibrary;
 
@@ -73,9 +75,10 @@
                     self.recentsGroup = group;
                 }
 
-                if (group.numberOfAssets > 0)
+                if (group.numberOfAssets > 0 && ![nameArray containsObject:sGroupPropertyName])
                 {
                     [self.assetGroups addObject:group];
+                    [nameArray addObject:sGroupPropertyName];
                 }
                 
                 // Reload albums
@@ -95,7 +98,7 @@
                     
             // Enumerate Albums
             if (@available(iOS 13.0, *)) {
-                [self.library enumerateGroupsWithTypes: ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos
+                [self.library enumerateGroupsWithTypes: ALAssetsGroupAll//ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos
                                             usingBlock:assetGroupEnumerator
                                           failureBlock:assetGroupEnumberatorFailure];
             }else{
