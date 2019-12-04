@@ -94,10 +94,23 @@
             // Group Enumerator Failure Block
             void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"To upload a photo, the App needs your permission. Tap Settings and change the access to Photos.", @"") message:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"") otherButtonTitles:NSLocalizedString(@"Settings", @""), nil];
-                [alert show];
-                
-                NSLog(@"A problem occured %@", [error description]);	                                 
+                UIAlertController *ac = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"To upload a photo, the App needs your permission. Tap Settings and change the access to Photos.", @"")
+                                                                            message:nil
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+                [ac addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"")
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:^(UIAlertAction *action){
+                    [self.parentViewController dismissViewControllerAnimated:YES
+                    completion:nil];
+                }]];
+                [ac addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"")
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *action){
+                    [self.parentViewController dismissViewControllerAnimated:YES
+                                                                  completion:nil];
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                }]];
+                [self presentViewController:ac animated:YES completion:nil];
             };
             
             
@@ -108,27 +121,6 @@
                                       failureBlock:assetGroupEnumberatorFailure];
         }
     });    
-}
-
-#pragma mark - UIAlertViewDelegate methods
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch (buttonIndex) {
-        case 1:
-        {
-            [self.parentViewController dismissViewControllerAnimated:YES
-                                                          completion:nil];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-            break;
-        }
-        case 0:
-        {
-            [self.parentViewController dismissViewControllerAnimated:YES
-                                                          completion:nil];
-        }
-        default:
-            break;
-    }
 }
 
 - (void)reloadTableView
